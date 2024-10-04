@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+img {
+  max-height: 100%;
+}
+
+input,
+textarea {
+  border: 2px solid gray;
+  border-radius: 8px;
+  padding: 2px;
+  width: 100%;
+  margin-bottom: 8px;
+  resize: none;
+}
+
+input:hover,
+textarea:hover {
+  border: 2px solid rgb(17, 64, 207);
+}
+
+h1 {
+  color: rgb(17, 64, 207);
+  margin-bottom: 4px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+label {
+  color: #1e3a8a;
+  font-weight: 600;
+
+  span {
+    font-style: italic;
+  }
+}
+
+.btn-primary {
+  background-color: #1e3a8a;
+  color: #fff;
+  padding: 8px 4px;
+  width: 64px;
+  border-radius: 8px;
+  font-weight: bold;
+
+  &:hover {
+    background-color: rgb(47, 71, 142);
+  }
+}
+
+table.basic {
+  width: 100%;
+
+  a {
+    display: inline-flex;
+    background-color: #1e3a8a;
+    color: #fff;
+    font-size: 14px;
+    padding: 6px;
+    border-radius: 8px;
+    gap: 1px;
+    align-items: center;
+    margin-right: 8px;
+  }
+}
+
+table.basic thead tr td {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+table.basic tr td {
+  border: 2px solid #000;
+  padding: 6px;
+}
+.btn-red,
+.btn-default {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.btn-red {
+  background-color: #9c0202;
+  color: #fff;
+}
+
+.btn-default {
+  background-color: #60615f;
+  color: #fff;
+}
