@@ -12,6 +12,7 @@ const ProductForm = ({
   price: currentPrice,
   images: currentImages,
   category: currentCategory,
+  properties: currentProperty,
 }) => {
   const [title, setTitle] = useState(currentTitle || "");
   const [description, setDescription] = useState(currentDescription || "");
@@ -21,6 +22,9 @@ const ProductForm = ({
   const [goToProducts, setGoToProducts] = useState(false);
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState(currentCategory || "");
+  const [productProperties, setProductProperties] = useState(
+    currentProperty || {}
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -31,7 +35,14 @@ const ProductForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { title, description, price, images, category };
+    const data = {
+      title,
+      description,
+      price,
+      images,
+      category,
+      properties: productProperties,
+    };
 
     if (_id) {
       //update
@@ -68,6 +79,28 @@ const ProductForm = ({
     setImages(images);
   };
 
+  const propertiesToFill = [];
+
+  if (categories.length > 0 && category) {
+    let categoryInfo = categories.find(({ _id }) => _id === category);
+    propertiesToFill.push(...categoryInfo.properties);
+    while (categoryInfo.parent?._id) {
+      const parentCategory = categories.find(
+        ({ _id }) => _id === categoryInfo.parent?._id
+      );
+      propertiesToFill.push(...parentCategory.properties);
+      categoryInfo = parentCategory;
+    }
+  }
+
+  const setProductProp = (propName, value) => {
+    setProductProperties((prev) => {
+      const newProductProps = { ...prev };
+      newProductProps[propName] = value;
+      return newProductProps;
+    });
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <label>Name</label>
@@ -87,6 +120,20 @@ const ProductForm = ({
           {categories.length > 0 &&
             categories.map((c) => <option value={c._id}>{c.name}</option>)}
         </select>
+        {propertiesToFill.length > 0 &&
+          propertiesToFill.map((prop) => (
+            <div className="flex gap-1">
+              <div>{prop.name}</div>
+              <select
+                value={productProperties[prop.name]}
+                onChange={(ev) => setProductProp(prop.name, ev.target.value)}
+              >
+                {prop.values.map((v) => (
+                  <option value={v}>{v}</option>
+                ))}
+              </select>
+            </div>
+          ))}
       </label>
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
