@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import axios from "axios";
 import Spinner from "./Spinner";
+import { useEffect } from "react";
 
 const ProductForm = ({
   _id,
@@ -10,6 +11,7 @@ const ProductForm = ({
   description: currentDescription,
   price: currentPrice,
   images: currentImages,
+  category: currentCategory,
 }) => {
   const [title, setTitle] = useState(currentTitle || "");
   const [description, setDescription] = useState(currentDescription || "");
@@ -17,11 +19,19 @@ const ProductForm = ({
   const [images, setImages] = useState(currentImages || []);
   const [isUploading, setIsUploading] = useState(false);
   const [goToProducts, setGoToProducts] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState(currentCategory || "");
   const router = useRouter();
+
+  useEffect(() => {
+    axios.get("/api/categories").then((res) => {
+      setCategories(res.data);
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { title, description, price, images };
+    const data = { title, description, price, images, category };
 
     if (_id) {
       //update
@@ -67,7 +77,17 @@ const ProductForm = ({
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-
+      <label>
+        Category
+        <select
+          value={category}
+          onChange={(ev) => setCategory(ev.target.value)}
+        >
+          <option value="">Uncategorized</option>
+          {categories.length > 0 &&
+            categories.map((c) => <option value={c._id}>{c.name}</option>)}
+        </select>
+      </label>
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
         <ReactSortable

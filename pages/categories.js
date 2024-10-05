@@ -1,36 +1,136 @@
 import Layout from "@/components/Layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { withSwal } from "react-sweetalert2";
 
-const Categories = () => {
+function Categories({ swal }) {
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
+  const [parentCategory, setParentCategory] = useState("");
+  const [editedCategory, setEditedCategory] = useState(null);
+  const [properties, setProperties] = useState([]);
 
   useEffect(() => {
+    getCategories();
+  }, []);
+
+  const getCategories = () => {
     axios.get("/api/categories").then((res) => {
       setCategories(res.data);
     });
-  }, []);
+  };
 
   const saveCategory = async (ev) => {
     ev.preventDefault();
-    await axios.post("/api/categories/", { name });
+
+    const data = { name, parentCategory };
+
+    if (editedCategory) {
+      data._id = editedCategory._id;
+      await axios.put("/api/categories", data);
+      setEditedCategory(null);
+    } else {
+      await axios.post("/api/categories/", data);
+    }
     setName("");
+    getCategories();
   };
+
+  const editCategory = (category) => {
+    setEditedCategory(category);
+    setName(category.name);
+    setParentCategory(category.parent?._id);
+  };
+
+  const deleteCategory = (category) => {
+    swal
+      .fire({
+        title: `Are you sure?`,
+        text: `Do you wanna delete "${category.name}"?`,
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        confirmButtonText: "Yes, delete",
+        confirmButtonColor: "#d55",
+        reverseButtons: true,
+      })
+      .then(async (result) => {
+        const { _id } = category;
+        if (result.isConfirmed) {
+          await axios.delete("/api/categories?_id=" + _id);
+          getCategories();
+        }
+      });
+  };
+
+  const addProperty = () => {
+    setProperties((prev) => {
+      return [
+        ...prev,
+        {
+          name: "",
+          values: "",
+        },
+      ];
+    });
+  };
+
+  const handlePropertyChangeName = (property) => {};
 
   return (
     <Layout>
       <h1>Categories</h1>
-      <label>New category name</label>
+      <label>
+        {editedCategory
+          ? `Edit Category ${editedCategory.name}`
+          : "Create New Category"}
+      </label>
       <form onSubmit={saveCategory}>
-        <div className="flex gap-2">
+        <div className="flex gap-1">
           <input
             type="text"
             placeholder="Category name"
-            className="mb-0"
             value={name}
+            W
             onChange={(e) => setName(e.target.value)}
           />
+          <select
+            value={parentCategory}
+            onChange={(e) => setParentCategory(e.target.value)}
+          >
+            <option value="">No parent category</option>
+            {categories.length > 0 &&
+              categories.map((category) => (
+                <option value={category._id}>{category.name}</option>
+              ))}
+          </select>
+        </div>
+        <div className="mb-2">
+          <label className="block">Properties</label>
+          <button
+            type="button"
+            className="btn-default text-sm"
+            onClick={addProperty}
+          >
+            Add new Property
+          </button>
+          {properties.length > 0 &&
+            properties.map((property) => (
+              <div className="flex gap-1">
+                <input
+                  value={property.name}
+                  onChange={() => handlePropertyChangeName(property)}
+                  type="text"
+                  placeholder="property name (ex: color)"
+                />
+                <input
+                  type="text"
+                  placeholder="values (separated by comma)"
+                  value={property.values}
+                />
+              </div>
+            ))}
+        </div>
+        <div className="flex gap-2">
           <button type="submit" className="btn btn-primary py-1">
             Save
           </button>
@@ -40,6 +140,8 @@ const Categories = () => {
         <thead>
           <tr>
             <td>Category</td>
+            <td>Parent Category</td>
+            <td>Actions</td>
           </tr>
         </thead>
         <tbody>
@@ -47,12 +149,27 @@ const Categories = () => {
             categories.map((category) => (
               <tr>
                 <td>{category.name}</td>
+                <td>{category?.parent?.name}</td>
+                <td>
+                  <button
+                    className="btn btn-primary mr-1"
+                    onClick={() => editCategory(category)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => deleteCategory(category)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
         </tbody>
       </table>
     </Layout>
   );
-};
+}
 
-export default Categories;
+export default withSwal(({ swal }, ref) => <Categories swal={swal} />);
