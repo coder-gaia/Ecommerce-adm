@@ -9,11 +9,12 @@ img {
 input,
 textarea,
 select {
-  border: 2px solid gray;
-  border-radius: 8px;
-  padding: 2px;
+  border: 1px solid #3d3939;
+  border-radius: 6px;
+  padding: 2px 6px;
   width: 100%;
   margin-bottom: 8px;
+  font-weight: bold;
   resize: none;
 }
 
@@ -24,14 +25,14 @@ select:hover {
 }
 
 h1 {
-  color: rgb(17, 64, 207);
+  color: #3d3939;
   margin-bottom: 4px;
   font-size: 24px;
   font-weight: bold;
 }
 
 label {
-  color: #1e3a8a;
+  color: #3d3939;
   font-weight: 600;
 
   span {
@@ -40,11 +41,11 @@ label {
 }
 
 .btn-primary {
-  background-color: #1e3a8a;
+  background-color: #5542f6;
   color: #fff;
   padding: 8px 4px;
   width: 64px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: bold;
 
   &:hover {
@@ -54,42 +55,57 @@ label {
 
 table.basic {
   width: 100%;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.55);
 
   a {
+    padding: 4px 4px;
+    width: 80px;
+    border-radius: 6px;
     display: inline-flex;
-    background-color: #1e3a8a;
-    color: #fff;
     font-size: 14px;
-    padding: 6px;
-    border-radius: 8px;
-    gap: 1px;
+    gap: 2px;
     align-items: center;
-    margin-right: 8px;
+    margin-left: 10px;
   }
 }
 
 table.basic thead tr td {
-  background-color: #1e3a8a;
-  color: #fff;
+  font-size: small;
+  text-transform: uppercase;
+  color: #545050;
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
 }
 
 table.basic tr td {
-  border: 2px solid #000;
-  padding: 6px;
+  padding: 10px;
 }
 .btn-red,
 .btn-default {
   padding: 6px 10px;
   border-radius: 8px;
-  font-weight: bold;
 }
 
 .btn-red {
-  background-color: #9c0202;
-  color: #fff;
+  background-color: #da9797;
+  color: #da0000;
+  border-radius: 6px;
+  width: 80px;
+
+  &:hover {
+    background-color: #ca7777;
+  }
 }
 
 .btn-default {
-  background-color: #60615f;
-  color: #fff;
+  color: #3d3939;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid black;
+
+  &:hover {
+    background-color: #5b4d4d;
+  }
 }
