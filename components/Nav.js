@@ -1,14 +1,22 @@
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Nav = () => {
   const inactiveLink = "flex gap-1 p-1";
-  const activeLink = inactiveLink + " bg-white text-blue-900 rounded-l-lg";
+  const activeLink = inactiveLink + " bg-highlight text-black rounded-md";
+  const inactiveIcon = "w-6 h-6";
+  const activeIcon = inactiveIcon + " text-primary";
   const router = useRouter();
   const { pathname } = router;
 
+  async function logout() {
+    await router.push("/");
+    await signOut();
+  }
+
   return (
-    <aside className="text-white p-4 pr-0">
+    <aside className="text-gray-500 p-4">
       <Link href={"/"} className="flex gap-1 mb-4 mr-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -33,17 +41,12 @@ const Nav = () => {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
             viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
+            fill="currentColor"
+            className={pathname === "/" ? activeIcon : inactiveIcon}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-            />
+            <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
+            <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
           </svg>
           Dashboard
         </Link>
@@ -57,7 +60,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className={pathname === "/products" ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -79,7 +82,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className={pathname === "/categories" ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -99,7 +102,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className={pathname === "/orders" ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -119,7 +122,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className={pathname === "/settings" ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -134,6 +137,24 @@ const Nav = () => {
           </svg>
           Settings
         </Link>
+
+        <button className={inactiveLink} onClick={logout}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+            />
+          </svg>
+          Logout
+        </button>
       </nav>
     </aside>
   );

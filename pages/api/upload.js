@@ -2,10 +2,15 @@ import multiparty from "multiparty";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import fs from "fs";
 import mime from "mime-types";
+import { authOptions, isAdmRequest } from "./auth/[...nextauth]";
+import { mongooseConnect } from "@/lib/mongoose";
 
 const bucketName = "next-ecommerce-adm";
 
 const handle = async (req, res) => {
+  await mongooseConnect();
+  await isAdmRequest(req, res, authOptions);
+
   const form = new multiparty.Form();
 
   const { fields, files } = await new Promise((resolve, reject) => {

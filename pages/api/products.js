@@ -1,9 +1,11 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
+import { authOptions, isAdmRequest } from "./auth/[...nextauth]";
 
 export default async function handler(req, res) {
   const { method } = req;
   await mongooseConnect();
+  await isAdmRequest(req, res, authOptions);
 
   if (method === "POST") {
     const { title, description, price, images, category, properties } =
