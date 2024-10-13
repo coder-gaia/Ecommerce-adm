@@ -57,7 +57,7 @@ table.basic {
   width: 100%;
   background-color: #fff;
   border-radius: 6px;
-  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.55);
+  box-shadow: 8px 10px 5px 0px rgba(0, 0, 0, 0.15);
 
   a {
     padding: 4px 4px;
@@ -71,7 +71,8 @@ table.basic {
   }
 }
 
-table.basic thead tr td {
+table.basic thead tr td,
+table.basic thead tr th {
   font-size: small;
   text-transform: uppercase;
   color: #545050;
